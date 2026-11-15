@@ -1,3 +1,5 @@
+import Image from "next/image";
+import logo from "../../public/logo.png";
 import type { Theme } from "@/generated/prisma/enums";
 import { themeStyle } from "@/lib/themes";
 
@@ -78,6 +80,7 @@ export function ThemeArt({
   );
 }
 
-export function Logo({ className = "text-2xl" }: { className?: string }) {
-  return <span className={`logo-text leading-none ${className}`}>SpectRoom</span>;
+/** Logo wordmark SpectRoom (public/logo.png). Atur ukuran lewat kelas tinggi, mis. `h-9`. */
+export function Logo({ className = "h-8", priority = false }: { className?: string; priority?: boolean }) {
+  return <Image src={logo} alt="SpectRoom" priority={priority} className={`w-auto select-none ${className}`} />;
 }

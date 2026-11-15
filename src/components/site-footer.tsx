@@ -36,7 +36,7 @@ export function SiteFooter() {
     <footer className="mt-auto border-t-2 border-ink bg-deep text-white">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
-          <Logo className="text-3xl" />
+          <Logo className="h-11" />
           <p className="mt-3 max-w-xs text-sm text-white/70">
             Tiket event seru di Bandung dan sekitarnya. Pilih, bayar, lalu meluncur ke event favoritmu.
           </p>

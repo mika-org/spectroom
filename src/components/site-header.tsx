@@ -11,7 +11,7 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-teal-dark">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4">
         <Link href="/" aria-label="SpectRoom beranda">
-          <Logo className="text-[26px]" />
+          <Logo className="h-9" priority />
         </Link>
         <NavLinks />
         <div className="ml-auto flex items-center gap-2">

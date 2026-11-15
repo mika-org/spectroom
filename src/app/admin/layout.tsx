@@ -14,8 +14,8 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
     <div className="min-h-screen bg-cream lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="border-b-2 border-ink bg-deep text-white lg:sticky lg:top-0 lg:h-screen lg:border-r-2 lg:border-b-0">
         <div className="flex items-center justify-between p-5">
-          <Link href="/admin" className="flex items-baseline gap-2">
-            <Logo className="text-2xl" />
+          <Link href="/admin" className="flex items-center gap-2">
+            <Logo className="h-8" />
             <span className="rounded bg-sun px-1.5 text-[10px] font-bold text-ink">ADMIN</span>
           </Link>
         </div>

@@ -16,7 +16,6 @@
 
   --font-display: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-  --font-logo: var(--font-lobster), cursive;
 
   --shadow-brutal-sm: 2px 2px 0 0 #1b1b1f;
   --shadow-brutal: 4px 4px 0 0 #1b1b1f;
@@ -65,16 +64,6 @@ body {
 @utility text-outline {
   text-shadow:
     3px 3px 0 var(--color-ink),
-    -1px -1px 0 var(--color-ink),
-    1px -1px 0 var(--color-ink),
-    -1px 1px 0 var(--color-ink);
-}
-
-.logo-text {
-  font-family: var(--font-logo);
-  color: var(--color-sun);
-  text-shadow:
-    2px 2px 0 var(--color-ink),
     -1px -1px 0 var(--color-ink),
     1px -1px 0 var(--color-ink),
     -1px 1px 0 var(--color-ink);

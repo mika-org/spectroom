@@ -74,7 +74,7 @@ export function SplashScreen() {
             akhir ? "scale-100 opacity-100" : "scale-50 opacity-0"
           }`}
         >
-          <Logo className="text-6xl ![text-shadow:4px_4px_0_#1b1b1f,-2px_-2px_0_#1b1b1f,2px_-2px_0_#1b1b1f,-2px_2px_0_#1b1b1f,0_3px_0_#1b1b1f] md:text-8xl" />
+          <Logo className="h-20 md:h-32" priority />
         </div>
         <p
           className={`mt-3 font-display text-lg font-semibold text-white text-outline transition-opacity delay-500 duration-500 md:text-2xl ${
