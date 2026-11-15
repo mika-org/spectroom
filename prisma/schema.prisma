@@ -1,0 +1,203 @@
+// SpectRoom — skema database aplikasi tiket event
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+/// Tema warna kartu/banner event (gradient + warna planet)
+enum Theme {
+  SUNSET // oranye → kuning
+  GRAPE // ungu → pink
+  OCEAN // biru
+  FOREST // hijau
+  NIGHT // teal gelap
+  CORAL // merah muda → oranye
+  SAND // krem → oranye
+}
+
+enum PaymentMethod {
+  QRIS
+  BANK_TRANSFER
+  EWALLET
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+enum PromoType {
+  PERCENT
+  FIXED
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  phone        String?
+  city         String?
+  birthDate    DateTime?
+  role         Role       @default(USER)
+  points       Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  orders       Order[]
+  favorites    Favorite[]
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  theme       Theme    @default(SUNSET)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  events      Event[]
+}
+
+model Organizer {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  events      Event[]
+}
+
+model Event {
+  id          String       @id @default(cuid())
+  title       String
+  slug        String       @unique
+  summary     String?
+  description String
+  terms       String?
+  venue       String
+  address     String
+  city        String
+  startAt     DateTime
+  endAt       DateTime?
+  theme       Theme        @default(SUNSET)
+  isTrending  Boolean      @default(false)
+  status      EventStatus  @default(PUBLISHED)
+  /// Harga tiket termurah (denormalisasi untuk filter & urutan)
+  minPrice    Int          @default(0)
+  categoryId  String
+  category    Category     @relation(fields: [categoryId], references: [id])
+  organizerId String?
+  organizer   Organizer?   @relation(fields: [organizerId], references: [id], onDelete: SetNull)
+  ticketTypes TicketType[]
+  orders      Order[]
+  favorites   Favorite[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([categoryId])
+  @@index([startAt])
+  @@index([status])
+}
+
+model TicketType {
+  id          String      @id @default(cuid())
+  eventId     String
+  event       Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Int
+  quota       Int
+  sold        Int         @default(0)
+  badge       String?
+  sortOrder   Int         @default(0)
+  orderItems  OrderItem[]
+
+  @@index([eventId])
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  code          String        @unique
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId       String
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  buyerName     String
+  buyerEmail    String
+  buyerPhone    String
+  buyerCity     String
+  sendEmail     Boolean       @default(true)
+  subtotal      Int
+  serviceFee    Int
+  discount      Int           @default(0)
+  total         Int
+  paymentMethod PaymentMethod
+  status        OrderStatus   @default(PENDING)
+  promoCodeId   String?
+  promoCode     PromoCode?    @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
+  items         OrderItem[]
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+
+  @@index([userId])
+  @@index([eventId])
+}
+
+model OrderItem {
+  id           String     @id @default(cuid())
+  orderId      String
+  order        Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  ticketTypeId String
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Restrict)
+  quantity     Int
+  unitPrice    Int
+}
+
+model PromoCode {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  description String?
+  type        PromoType @default(PERCENT)
+  value       Int
+  maxDiscount Int?
+  active      Boolean   @default(true)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  orders      Order[]
+}
+
+model Favorite {
+  userId    String
+  eventId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, eventId])
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}

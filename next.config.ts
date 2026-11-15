@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Cache Components dimatikan: halaman membaca DB & cookie sesi secara dinamis
+  // (model caching klasik Next.js).
+  serverExternalPackages: ["pg", "@prisma/adapter-pg"],
   turbopack: {
     rules: {
       "*.css": {

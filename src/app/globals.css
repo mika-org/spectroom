@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-teal: #1a9c99;
+  --color-teal-dark: #127c7a;
+  --color-deep: #0b3a3b;
+  --color-ink: #1b1b1f;
+  --color-cream: #fff5d9;
+  --color-cream-dark: #fbe6ad;
+  --color-sun: #ffd84d;
+  --color-sun-dark: #f5c518;
+  --color-coral: #ff7a59;
+  --color-grape: #8e5cf7;
+  --color-sky: #9ad7f5;
+  --color-mint: #b9e8c6;
+
+  --font-display: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-lobster), cursive;
+
+  --shadow-brutal-sm: 2px 2px 0 0 #1b1b1f;
+  --shadow-brutal: 4px 4px 0 0 #1b1b1f;
+  --shadow-brutal-lg: 6px 6px 0 0 #1b1b1f;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-teal);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Latar teal dengan bintang-bintang kecil */
+.bg-space {
+  background-color: var(--color-teal);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.55) 1px, transparent 1.6px),
+    radial-gradient(circle at 78% 32%, rgba(255, 255, 255, 0.45) 1px, transparent 1.6px),
+    radial-gradient(circle at 42% 72%, rgba(255, 255, 255, 0.5) 1px, transparent 1.6px),
+    radial-gradient(circle at 88% 84%, rgba(255, 216, 77, 0.7) 1.2px, transparent 1.8px),
+    radial-gradient(circle at 25% 92%, rgba(255, 255, 255, 0.4) 1px, transparent 1.6px);
+  background-size: 260px 260px, 340px 340px, 300px 300px, 420px 420px, 380px 380px;
+}
+
+/* Efek sinar (sunburst) di atas gradient */
+.sunburst {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.sunburst::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  z-index: -1;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255, 255, 255, 0.22) 0deg 9deg, transparent 9deg 18deg);
+}
+.sunburst-teal {
+  background: radial-gradient(circle at 50% 40%, #2bb3af 0%, var(--color-teal) 60%);
+}
+
+@utility text-outline {
+  text-shadow:
+    3px 3px 0 var(--color-ink),
+    -1px -1px 0 var(--color-ink),
+    1px -1px 0 var(--color-ink),
+    -1px 1px 0 var(--color-ink);
+}
+
+.logo-text {
+  font-family: var(--font-logo);
+  color: var(--color-sun);
+  text-shadow:
+    2px 2px 0 var(--color-ink),
+    -1px -1px 0 var(--color-ink),
+    1px -1px 0 var(--color-ink),
+    -1px 1px 0 var(--color-ink);
+}
+
+@utility card {
+  @apply rounded-2xl border-2 border-ink bg-cream shadow-brutal;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-ink px-5 py-2.5 font-display font-semibold text-ink shadow-brutal-sm transition hover:-translate-y-0.5 hover:shadow-brutal active:translate-y-0 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0;
+}
+
+@utility btn-sun {
+  @apply btn bg-sun;
+}
+
+@utility btn-cream {
+  @apply btn bg-cream;
+}
+
+@utility btn-ink {
+  @apply btn bg-ink text-cream;
+}
+
+@utility btn-danger {
+  @apply btn bg-coral text-white;
+}
+
+@utility btn-sm {
+  @apply px-3 py-1.5 text-sm;
+}
+
+@utility input {
+  @apply w-full rounded-xl border-2 border-ink bg-cream-dark/60 px-3.5 py-2.5 text-sm text-ink outline-none placeholder:text-ink/40 focus:bg-white focus:ring-2 focus:ring-sun;
+}
+
+@utility label {
+  @apply mb-1.5 block text-[11px] font-semibold tracking-wider text-ink/70 uppercase;
+}
+
+@utility chip {
+  @apply inline-flex items-center rounded-full border-2 border-ink bg-ink px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-sun uppercase;
+}
+
+@utility heading {
+  @apply font-display font-bold text-white text-outline;
+}
+
+/* ---------- Splash screen (lihat src/components/splash-screen.tsx) ---------- */
+html.splash-lock {
+  overflow: hidden;
+}
+.splash-rays {
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.13) 0deg 9deg, transparent 9deg 18deg);
+  animation: splash-spin 40s linear infinite;
+}
+.splash-float {
+  animation: splash-float 4s ease-in-out infinite;
+}
+.splash-float-alt {
+  animation: splash-float 5s ease-in-out infinite reverse;
+}
+.splash-twinkle {
+  animation: splash-twinkle 1.8s ease-in-out infinite;
+}
+.splash-rocket {
+  animation: splash-rocket 0.9s ease-in-out infinite;
+}
+/* Hanya properti `rotate` agar posisi (translate -50%) tetap di tengah layar saat berputar */
+@keyframes splash-spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes splash-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(4deg);
+  }
+}
+@keyframes splash-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+@keyframes splash-rocket {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .splash-rays,
+  .splash-float,
+  .splash-float-alt,
+  .splash-twinkle,
+  .splash-rocket {
+    animation: none;
+  }
 }
